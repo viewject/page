@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viewject — Visual to Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F2EC;
+    --ink: #111110;
+    --ink-soft: #3a3a38;
+    --ink-muted: #888880;
+    --accent: #C8A96E;
+    --accent-dark: #A07840;
+    --surface: #EDEAE3;
+    --white: #FAFAF8;
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: rgba(245, 242, 236, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid rgba(0,0,0,0.08);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent-dark); }
+
+  .nav-cta {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    border: 1px solid var(--ink);
+    padding: 0.55rem 1.4rem;
+    transition: all 0.25s;
+  }
+
+  .nav-cta:hover {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 4rem 6rem 4rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 6vw, 6rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent-dark);
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--ink-soft);
+    max-width: 400px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1rem 2.2rem;
+    transition: all 0.25s;
+  }
+
+  .btn-primary:hover { background: var(--accent-dark); }
+
+  .btn-ghost {
+    display: inline-block;
+    color: var(--ink-soft);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1rem 0;
+    border-bottom: 1px solid transparent;
+    transition: all 0.25s;
+  }
+
+  .btn-ghost:hover {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-visual {
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    opacity: 0;
+    animation: fadeIn 1.2s 0.3s forwards;
+  }
+
+  .hero-stat-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 50%;
+    background: var(--accent);
+    padding: 1.2rem 4rem;
+    display: flex;
+    gap: 3rem;
+    z-index: 3;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+
+  .stat { }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.7;
+  }
+
+  /* SECTION SHARED */
+  section { padding: 7rem 4rem; }
+
+  .section-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title em { font-style: italic; color: var(--accent-dark); }
+
+  /* SERVICES */
+  #services { background: var(--white); }
+
+  .services-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 5rem;
+  }
+
+  .services-desc {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    max-width: 480px;
+  }
+
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .pkg {
+    background: var(--white);
+    padding: 2.5rem 2rem;
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  .pkg:hover { background: var(--cream); }
+
+  .pkg.featured { background: var(--ink); }
+  .pkg.featured:hover { background: #222; }
+
+  .pkg-tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .pkg.featured .pkg-tag { color: var(--accent); }
+
+  .pkg-name {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+  }
+
+  .pkg.featured .pkg-name { color: var(--cream); }
+
+  .pkg-price {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--ink-muted);
+    margin-bottom: 2rem;
+  }
+
+  .pkg.featured .pkg-price { color: rgba(245,242,236,0.5); }
+
+  .pkg-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .pkg-features li {
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--ink-soft);
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .pkg.featured .pkg-features li { color: rgba(245,242,236,0.75); }
+
+  .pkg-features li::before {
+    content: '—';
+    color: var(--accent);
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    margin-top: 0.2rem;
+  }
+
+  .pkg-features li.star::before { content: '★'; font-size: 0.65rem; }
+
+  .pkg-link {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+    transition: all 0.2s;
+  }
+
+  .pkg.featured .pkg-link { color: var(--accent); border-bottom-color: var(--accent); }
+  .pkg-link:hover { opacity: 0.6; }
+
+  /* HOW IT WORKS */
+  #process { background: var(--cream); }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 4rem;
+    border-top: 0.5px solid rgba(0,0,0,0.12);
+  }
+
+  .process-step {
+    padding: 2.5rem 2rem 2.5rem 0;
+    border-right: 0.5px solid rgba(0,0,0,0.12);
+    position: relative;
+  }
+
+  .process-step:last-child { border-right: none; padding-right: 0; }
+  .process-step:not(:first-child) { padding-left: 2rem; }
+
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    font-weight: 300;
+    color: rgba(0,0,0,0.07);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .step-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.01em;
+  }
+
+  .step-desc {
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+
+  /* PORTFOLIO */
+  #portfolio { background: var(--ink); padding: 7rem 4rem; }
+
+  #portfolio .section-eyebrow { color: var(--accent); }
+  #portfolio .section-title { color: var(--cream); }
+
+  .portfolio-intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+  }
+
+  .portfolio-note {
+    font-size: 0.85rem;
+    color: rgba(245,242,236,0.4);
+    font-style: italic;
+    font-family: var(--font-display);
+    max-width: 300px;
+    text-align: right;
+  }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 280px 280px;
+    gap: 2px;
+  }
+
+  .port-cell {
+    background: #1e1e1c;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+  }
+
+  .port-cell:first-child {
+    grid-column: span 2;
+    background: #1a1a18;
+  }
+
+  .port-cell-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    font-family: var(--font-body);
+  }
+
+  .port-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .port-placeholder-text {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-style: italic;
+    color: rgba(255,255,255,0.08);
+    text-align: center;
+    padding: 1rem;
+  }
+
+  /* ABOUT */
+  #about {
+    background: var(--surface);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 0;
+  }
+
+  .about-left {
+    padding: 7rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .about-right {
+    background: var(--ink);
+    padding: 7rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .about-right .section-eyebrow { color: var(--accent); }
+
+  .about-body {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--ink-soft);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .about-creds {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cred {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: var(--ink-soft);
+  }
+
+  .cred::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 0.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .about-quote {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.3;
+    margin-bottom: 2rem;
+  }
+
+  .about-quote strong {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .about-right .about-body { color: rgba(245,242,236,0.55); }
+  .about-right .cred { color: rgba(245,242,236,0.55); }
+
+  /* CONTACT */
+  #contact { background: var(--cream); }
+
+  .contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .contact-info { padding-top: 0.5rem; }
+
+  .contact-body {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--ink-soft);
+    margin-bottom: 3rem;
+    line-height: 1.8;
+  }
+
+  .contact-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .contact-detail-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .contact-detail-value {
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+
+  /* FORM */
+  .form { display: flex; flex-direction: column; gap: 0; }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgba(0,0,0,0.15);
+    padding: 1.25rem 0;
+    position: relative;
+  }
+
+  .form-field::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--accent-dark);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .form-field:focus-within::after { transform: scaleX(1); }
+
+  .form-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    background: none;
+    border: none;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--ink);
+    width: 100%;
+    appearance: none;
+  }
+
+  .form-select { cursor: pointer; }
+
+  .form-textarea {
+    resize: none;
+    height: 120px;
+  }
+
+  .form-submit {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .form-note {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    font-style: italic;
+    font-family: var(--font-display);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    padding: 3rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--cream);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-logo span { color: var(--accent); }
+
+  .footer-copy {
+    font-size: 0.75rem;
+    color: rgba(245,242,236,0.3);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,242,236,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+
+    #hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 7rem 1.5rem 3rem; }
+    .hero-right { height: 50vh; }
+    .hero-stat-bar { left: 0; right: 0; padding: 1rem 1.5rem; gap: 2rem; }
+
+    section { padding: 5rem 1.5rem; }
+
+    .services-intro { grid-template-columns: 1fr; gap: 2rem; }
+    .packages-grid { grid-template-columns: 1fr; }
+    .process-grid { grid-template-columns: 1fr 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .port-cell:first-child { grid-column: span 1; }
+
+    #about { grid-template-columns: 1fr; }
+    .about-left, .about-right { padding: 5rem 1.5rem; }
+
+    .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+    .form-row { grid-template-columns: 1fr; }
+
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">View<span>ject</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get a quote</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Brisbane — Visual to Digital</p>
+    <h1 class="hero-title">Your property,<br><em>fully realised</em></h1>
+    <p class="hero-sub">Photography, 3D models, floor plans & virtual tours — built for Brisbane's property market.</p>
+    <div class="hero-actions">
+      <a href="#services" class="btn-primary">View packages</a>
+      <a href="#contact" class="btn-ghost">Get a quote →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <svg viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;inset:0;">
+        <defs>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0d0d0b"/>
+            <stop offset="100%" stop-color="#1a1a17"/>
+          </linearGradient>
+        </defs>
+        <!-- Background -->
+        <rect width="600" height="700" fill="url(#skyGrad)"/>
+
+        <!-- Ground shadow -->
+        <ellipse cx="300" cy="590" rx="220" ry="18" fill="#000" opacity="0.35"/>
+
+        <!-- === ISOMETRIC HOUSE === -->
+        <!-- Floor/base slab -->
+        <polygon points="300,540 520,420 300,300 80,420" fill="#1e1e1b" stroke="#C8A96E" stroke-width="0.5" opacity="0.5"/>
+
+        <!-- Left wall -->
+        <polygon points="80,420 300,540 300,360 80,240" fill="#252521"/>
+        <polygon points="80,420 300,540 300,360 80,240" fill="none" stroke="#C8A96E" stroke-width="0.6" opacity="0.4"/>
+
+        <!-- Right wall -->
+        <polygon points="520,420 300,540 300,360 520,240" fill="#1e1e1c"/>
+        <polygon points="520,420 300,540 300,360 520,240" fill="none" stroke="#C8A96E" stroke-width="0.6" opacity="0.3"/>
+
+        <!-- Left wall windows -->
+        <rect x="105" y="290" width="55" height="45" rx="1" fill="#0d0d0a" stroke="#C8A96E" stroke-width="0.8" opacity="0.9"/>
+        <line x1="132" y1="290" x2="132" y2="335" stroke="#C8A96E" stroke-width="0.4" opacity="0.5"/>
+        <line x1="105" y1="312" x2="160" y2="312" stroke="#C8A96E" stroke-width="0.4" opacity="0.5"/>
+        <!-- window warm glow -->
+        <rect x="106" y="291" width="25" height="20" fill="#C8A96E" opacity="0.06"/>
+
+        <rect x="175" y="310" width="55" height="45" rx="1" fill="#0d0d0a" stroke="#C8A96E" stroke-width="0.8" opacity="0.9"/>
+        <line x1="202" y1="310" x2="202" y2="355" stroke="#C8A96E" stroke-width="0.4" opacity="0.5"/>
+        <line x1="175" y1="332" x2="230" y2="332" stroke="#C8A96E" stroke-width="0.4" opacity="0.5"/>
+        <rect x="176" y="311" width="25" height="20" fill="#C8A96E" opacity="0.06"/>
+
+        <!-- Right wall windows -->
+        <rect x="355" y="290" width="55" height="45" rx="1" fill="#0d0d0a" stroke="#C8A96E" stroke-width="0.8" opacity="0.9"/>
+        <line x1="382" y1="290" x2="382" y2="335" stroke="#C8A96E" stroke-width="0.4" opacity="0.5"/>
+        <line x1="355" y1="312" x2="410" y2="312" stroke="#C8A96E" stroke-width="0.4" opacity="0.5"/>
+        <rect x="356" y="291" width="25" height="20" fill="#C8A96E" opacity="0.04"/>
+
+        <rect x="430" y="310" width="55" height="45" rx="1" fill="#0d0d0a" stroke="#C8A96E" stroke-width="0.8" opacity="0.9"/>
+        <line x1="457" y1="310" x2="457" y2="355" stroke="#C8A96E" stroke-width="0.4" opacity="0.5"/>
+        <line x1="430" y1="332" x2="485" y2="332" stroke="#C8A96E" stroke-width="0.4" opacity="0.5"/>
+
+        <!-- Door (left wall) -->
+        <rect x="240" y="460" width="38" height="80" rx="1" fill="#141411" stroke="#C8A96E" stroke-width="0.8" opacity="0.9"/>
+        <rect x="243" y="463" width="15" height="73" fill="#C8A96E" opacity="0.04"/>
+        <circle cx="275" cy="500" r="2" fill="#C8A96E" opacity="0.7"/>
+
+        <!-- Roof left face -->
+        <polygon points="80,240 300,120 300,360 80,240" fill="#2a2a26"/>
+        <polygon points="80,240 300,120 300,360 80,240" fill="none" stroke="#C8A96E" stroke-width="0.6" opacity="0.5"/>
+
+        <!-- Roof right face -->
+        <polygon points="520,240 300,120 300,360 520,240" fill="#222220"/>
+        <polygon points="520,240 300,120 300,360 520,240" fill="none" stroke="#C8A96E" stroke-width="0.6" opacity="0.35"/>
+
+        <!-- Roof ridge line -->
+        <line x1="300" y1="120" x2="300" y2="360" stroke="#C8A96E" stroke-width="1" opacity="0.6"/>
+
+        <!-- Roof top edge -->
+        <line x1="80" y1="240" x2="300" y2="120" stroke="#C8A96E" stroke-width="1.2" opacity="0.7"/>
+        <line x1="520" y1="240" x2="300" y2="120" stroke="#C8A96E" stroke-width="1.2" opacity="0.7"/>
+
+        <!-- Chimney -->
+        <rect x="370" y="88" width="22" height="60" fill="#2a2a26" stroke="#C8A96E" stroke-width="0.6" opacity="0.7"/>
+        <rect x="366" y="84" width="30" height="8" fill="#333330" stroke="#C8A96E" stroke-width="0.5" opacity="0.8"/>
+
+        <!-- === ANNOTATION LINES (architectural drawing style) === -->
+        <!-- Left dimension line -->
+        <line x1="40" y1="240" x2="40" y2="540" stroke="#C8A96E" stroke-width="0.5" opacity="0.35" stroke-dasharray="4,4"/>
+        <line x1="30" y1="240" x2="50" y2="240" stroke="#C8A96E" stroke-width="0.5" opacity="0.35"/>
+        <line x1="30" y1="540" x2="50" y2="540" stroke="#C8A96E" stroke-width="0.5" opacity="0.35"/>
+        <text x="28" y="393" fill="#C8A96E" font-size="9" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.45" transform="rotate(-90,28,393)">8.4 m</text>
+
+        <!-- Top dimension line -->
+        <line x1="80" y1="90" x2="520" y2="90" stroke="#C8A96E" stroke-width="0.5" opacity="0.3" stroke-dasharray="4,4"/>
+        <line x1="80" y1="80" x2="80" y2="100" stroke="#C8A96E" stroke-width="0.5" opacity="0.3"/>
+        <line x1="520" y1="80" x2="520" y2="100" stroke="#C8A96E" stroke-width="0.5" opacity="0.3"/>
+        <text x="300" y="78" fill="#C8A96E" font-size="9" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.4">14.2 m</text>
+
+        <!-- Label callouts -->
+        <line x1="160" y1="312" x2="60" y2="270" stroke="#C8A96E" stroke-width="0.4" opacity="0.3" stroke-dasharray="3,3"/>
+        <text x="55" y="265" fill="#C8A96E" font-size="8" font-family="'DM Sans',sans-serif" text-anchor="end" opacity="0.4">Living</text>
+
+        <line x1="462" y1="325" x2="555" y2="280" stroke="#C8A96E" stroke-width="0.4" opacity="0.3" stroke-dasharray="3,3"/>
+        <text x="558" y="275" fill="#C8A96E" font-size="8" font-family="'DM Sans',sans-serif" opacity="0.4">Bed 2</text>
+
+        <line x1="392" y1="88" x2="555" y2="115" stroke="#C8A96E" stroke-width="0.4" opacity="0.3" stroke-dasharray="3,3"/>
+        <text x="558" y="120" fill="#C8A96E" font-size="8" font-family="'DM Sans',sans-serif" opacity="0.4">Flue</text>
+
+        <!-- Corner dot markers -->
+        <circle cx="80" cy="240" r="2.5" fill="none" stroke="#C8A96E" stroke-width="0.8" opacity="0.5"/>
+        <circle cx="520" cy="240" r="2.5" fill="none" stroke="#C8A96E" stroke-width="0.8" opacity="0.5"/>
+        <circle cx="300" cy="120" r="2.5" fill="none" stroke="#C8A96E" stroke-width="0.8" opacity="0.6"/>
+        <circle cx="300" cy="360" r="2.5" fill="none" stroke="#C8A96E" stroke-width="0.8" opacity="0.4"/>
+        <circle cx="80" cy="420" r="2.5" fill="none" stroke="#C8A96E" stroke-width="0.8" opacity="0.4"/>
+        <circle cx="520" cy="420" r="2.5" fill="none" stroke="#C8A96E" stroke-width="0.8" opacity="0.4"/>
+        <circle cx="300" cy="540" r="2.5" fill="none" stroke="#C8A96E" stroke-width="0.8" opacity="0.4"/>
+
+        <!-- Scanning line animation -->
+        <line id="scanLine" x1="0" y1="0" x2="600" y2="0" stroke="#C8A96E" stroke-width="1" opacity="0.15">
+          <animate attributeName="y1" from="100" to="620" dur="4s" repeatCount="indefinite"/>
+          <animate attributeName="y2" from="100" to="620" dur="4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;0.18;0.18;0" keyTimes="0;0.1;0.9;1" dur="4s" repeatCount="indefinite"/>
+        </line>
+
+        <!-- === FLOATING POINT CLOUD (3D scan feel) === -->
+        <g opacity="0.55">
+          <circle cx="148" cy="178" r="1.2" fill="#C8A96E"><animate attributeName="opacity" values="0;1;0" dur="2.1s" begin="0s" repeatCount="indefinite"/></circle>
+          <circle cx="164" cy="195" r="0.8" fill="#C8A96E"><animate attributeName="opacity" values="0;1;0" dur="1.8s" begin="0.3s" repeatCount="indefinite"/></circle>
+          <circle cx="138" cy="210" r="1" fill="#C8A96E"><animate attributeName="opacity" values="0;1;0" dur="2.4s" begin="0.7s" repeatCount="indefinite"/></circle>
+          <circle cx="182" cy="165" r="0.8" fill="#C8A96E"><animate attributeName="opacity" values="0;1;0" dur="1.6s" begin="0.2s" repeatCount="indefinite"/></circle>
+          <circle cx="128" cy="190" r="1.4" fill="#C8A96E"><animate attributeName="opacity" values="0;1;0" dur="2.8s" begin="0.9s" repeatCount="indefinite"/></circle>
+          <circle cx="200" cy="182" r="0.9" fill="#C8A96E"><animate attributeName="opacity" values="0;1;0" dur="2.0s" begin="0.5s" repeatCount="indefinite"/></circle>
+
+          <circle cx="420" cy="175" r="1.1" fill="#C8A96E"><animate attributeName="opacity" values="0;1;0" dur="2.3s" begin="0.4s" repeatCount="indefinite"/></circle>
+          <circle cx="448" cy="195" r="0.9" fill="#C8A96E"><animate attributeName="opacity" values="0;1;0" dur="1.7s" begin="0.8s" repeatCount="indefinite"/></circle>
+          <circle cx="435" cy="162" r="1.3" fill="#C8A96E"><animate attributeName="opacity" values="0;1;0" dur="2.6s" begin="0.1s" repeatCount="indefinite"/></circle>
+          <circle cx="460" cy="178" r="0.8" fill="#C8A96E"><animate attributeName="opacity" values="0;1;0" dur="1.9s" begin="0.6s" repeatCount="indefinite"/></circle>
+          <circle cx="408" cy="190" r="1.0" fill="#C8A96E"><animate attributeName="opacity" values="0;1;0" dur="2.2s" begin="0.3s" repeatCount="indefinite"/></circle>
+
+          <circle cx="300" cy="100" r="1.5" fill="#C8A96E"><animate attributeName="opacity" values="0;0.8;0" dur="3s" begin="0.5s" repeatCount="indefinite"/></circle>
+          <circle cx="285" cy="115" r="0.9" fill="#C8A96E"><animate attributeName="opacity" values="0;0.8;0" dur="2.1s" begin="1s" repeatCount="indefinite"/></circle>
+          <circle cx="316" cy="108" r="1.1" fill="#C8A96E"><animate attributeName="opacity" values="0;0.8;0" dur="1.8s" begin="0.2s" repeatCount="indefinite"/></circle>
+        </g>
+
+        <!-- Watermark label bottom right -->
+        <text x="575" y="685" fill="#C8A96E" font-size="8" font-family="'DM Sans',sans-serif" text-anchor="end" opacity="0.2" letter-spacing="2">VIEWJECT</text>
+      </svg>
+    </div>
+  </div>
+  <div class="hero-stat-bar">
+    <div class="stat">
+      <div class="stat-num">48h</div>
+      <div class="stat-label">Turnaround</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Packages</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">BNE</div>
+      <div class="stat-label">Based in Brisbane</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-intro reveal">
+    <div>
+      <p class="section-eyebrow">What we offer</p>
+      <h2 class="section-title">Three packages,<br><em>one standard</em></h2>
+    </div>
+    <p class="services-desc">Every listing deserves to be seen at its best. Choose the package that fits — professional results, fast turnaround.</p>
+  </div>
+
+  <div class="packages-grid reveal">
+    <div class="pkg">
+      <span class="pkg-tag">Entry</span>
+      <h3 class="pkg-name">Snapshot</h3>
+      <p class="pkg-price">From $299 / property</p>
+      <ul class="pkg-features">
+        <li>Professional photography (up to 20 shots)</li>
+        <li>Basic editing &amp; colour correction</li>
+        <li>Digital delivery within 48 hours</li>
+        <li>Web-ready &amp; print-ready files</li>
+      </ul>
+      <a href="#contact" class="pkg-link">Get a quote</a>
+    </div>
+
+    <div class="pkg featured">
+      <span class="pkg-tag">Most popular</span>
+      <h3 class="pkg-name">Showcase</h3>
+      <p class="pkg-price">From $649 / property</p>
+      <ul class="pkg-features">
+        <li>Everything in Snapshot</li>
+        <li>360° virtual tour</li>
+        <li>2D floor plan</li>
+        <li>Delivery within 72 hours</li>
+      </ul>
+      <a href="#contact" class="pkg-link">Get a quote</a>
+    </div>
+
+    <div class="pkg">
+      <span class="pkg-tag">Premium</span>
+      <h3 class="pkg-name">Signature</h3>
+      <p class="pkg-price">From $1,299 / property</p>
+      <ul class="pkg-features">
+        <li>Everything in Showcase</li>
+        <li>3D model (Meshroom processed)</li>
+        <li>Detailed 3D floor plan</li>
+        <li>Embeddable virtual tour link</li>
+        <li>Priority 24hr turnaround</li>
+        <li class="star">In-person design consultation</li>
+        <li class="star">Pre-shoot staging &amp; layout advice</li>
+      </ul>
+      <a href="#contact" class="pkg-link">Get a quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="reveal">
+    <p class="section-eyebrow">How it works</p>
+    <h2 class="section-title">Simple from<br><em>start to publish</em></h2>
+  </div>
+  <div class="process-grid reveal">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <h3 class="step-title">Book your shoot</h3>
+      <p class="step-desc">Fill in the quote form. We confirm within 24 hours.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <h3 class="step-title">On-site capture</h3>
+      <p class="step-desc">We shoot with the Insta360 X5. Signature clients get a pre-shoot design walkthrough.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <h3 class="step-title">Processing</h3>
+      <p class="step-desc">Photos edited, 360° stitched, 3D models built in Meshroom. Floor plans drafted with architectural precision.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <h3 class="step-title">Delivery</h3>
+      <p class="step-desc">A clean download link — ready for realestate.com.au, Domain, or any listing platform.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="portfolio-intro reveal">
+    <div>
+      <p class="section-eyebrow">Our work</p>
+      <h2 class="section-title">Portfolio</h2>
+    </div>
+    <p class="portfolio-note">Work in progress — first shoots coming soon.</p>
+  </div>
+  <div class="portfolio-grid reveal">
+
+    <!-- Cell 1: Large — detailed floor plan drawing -->
+    <div class="port-cell">
+      <svg viewBox="0 0 520 280" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;">
+        <rect width="520" height="280" fill="#141412"/>
+        <!-- Outer walls -->
+        <rect x="60" y="30" width="400" height="220" fill="none" stroke="#C8A96E" stroke-width="2.5" opacity="0.7"/>
+        <!-- Internal walls -->
+        <line x1="220" y1="30" x2="220" y2="180" stroke="#C8A96E" stroke-width="2" opacity="0.6"/>
+        <line x1="60" y1="180" x2="320" y2="180" stroke="#C8A96E" stroke-width="2" opacity="0.6"/>
+        <line x1="320" y1="30" x2="320" y2="130" stroke="#C8A96E" stroke-width="2" opacity="0.6"/>
+        <line x1="320" y1="130" x2="460" y2="130" stroke="#C8A96E" stroke-width="2" opacity="0.6"/>
+        <!-- Door arcs -->
+        <path d="M220,60 Q248,60 248,88" fill="none" stroke="#C8A96E" stroke-width="0.7" opacity="0.5" stroke-dasharray="2,2"/>
+        <line x1="220" y1="60" x2="248" y2="60" stroke="#C8A96E" stroke-width="0.7" opacity="0.5"/>
+        <path d="M150,180 Q150,208 178,208" fill="none" stroke="#C8A96E" stroke-width="0.7" opacity="0.5" stroke-dasharray="2,2"/>
+        <line x1="150" y1="180" x2="150" y2="208" stroke="#C8A96E" stroke-width="0.7" opacity="0.5"/>
+        <!-- Windows -->
+        <line x1="100" y1="30" x2="140" y2="30" stroke="#C8A96E" stroke-width="3" opacity="0.5"/>
+        <line x1="260" y1="30" x2="300" y2="30" stroke="#C8A96E" stroke-width="3" opacity="0.5"/>
+        <line x1="350" y1="30" x2="390" y2="30" stroke="#C8A96E" stroke-width="3" opacity="0.5"/>
+        <line x1="460" y1="60" x2="460" y2="100" stroke="#C8A96E" stroke-width="3" opacity="0.5"/>
+        <line x1="60" y1="80" x2="60" y2="120" stroke="#C8A96E" stroke-width="3" opacity="0.5"/>
+        <line x1="60" y1="200" x2="60" y2="240" stroke="#C8A96E" stroke-width="3" opacity="0.5"/>
+        <!-- Room labels -->
+        <text x="135" y="115" fill="#C8A96E" font-size="9" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.5">Living / Dining</text>
+        <text x="345" y="85" fill="#C8A96E" font-size="9" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.5">Master</text>
+        <text x="390" y="185" fill="#C8A96E" font-size="9" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.5">Bed 2</text>
+        <text x="135" y="215" fill="#C8A96E" font-size="9" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.5">Kitchen</text>
+        <!-- Dimension lines -->
+        <line x1="60" y1="18" x2="460" y2="18" stroke="#C8A96E" stroke-width="0.5" opacity="0.3"/>
+        <line x1="60" y1="12" x2="60" y2="24" stroke="#C8A96E" stroke-width="0.5" opacity="0.3"/>
+        <line x1="460" y1="12" x2="460" y2="24" stroke="#C8A96E" stroke-width="0.5" opacity="0.3"/>
+        <text x="260" y="14" fill="#C8A96E" font-size="7" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.35">12.4 m</text>
+        <!-- North arrow -->
+        <text x="488" y="48" fill="#C8A96E" font-size="7" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.4">N</text>
+        <line x1="488" y1="52" x2="488" y2="70" stroke="#C8A96E" stroke-width="0.8" opacity="0.4"/>
+        <polygon points="488,52 484,64 488,61 492,64" fill="#C8A96E" opacity="0.4"/>
+        <!-- Scale bar -->
+        <line x1="60" y1="265" x2="160" y2="265" stroke="#C8A96E" stroke-width="0.8" opacity="0.35"/>
+        <line x1="60" y1="260" x2="60" y2="270" stroke="#C8A96E" stroke-width="0.8" opacity="0.35"/>
+        <line x1="110" y1="260" x2="110" y2="270" stroke="#C8A96E" stroke-width="0.8" opacity="0.35"/>
+        <line x1="160" y1="260" x2="160" y2="270" stroke="#C8A96E" stroke-width="0.8" opacity="0.35"/>
+        <text x="85" y="275" fill="#C8A96E" font-size="7" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.35">0     2     4 m</text>
+        <text x="480" y="275" fill="#C8A96E" font-size="7" font-family="'DM Sans',sans-serif" text-anchor="end" opacity="0.2" letter-spacing="1">VIEWJECT</text>
+      </svg>
+      <span class="port-cell-label">Floor plan — 2D</span>
+    </div>
+
+    <!-- Cell 2: Elevation drawing -->
+    <div class="port-cell">
+      <svg viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;">
+        <rect width="240" height="280" fill="#111110"/>
+        <!-- Ground line -->
+        <line x1="20" y1="230" x2="220" y2="230" stroke="#C8A96E" stroke-width="1" opacity="0.5"/>
+        <!-- House outline -->
+        <polygon points="120,50 200,110 200,230 40,230 40,110" fill="#1a1a18" stroke="#C8A96E" stroke-width="1.2" opacity="0.7"/>
+        <!-- Roof -->
+        <polygon points="120,50 210,115 30,115" fill="none" stroke="#C8A96E" stroke-width="1.5" opacity="0.8"/>
+        <line x1="120" y1="50" x2="120" y2="115" stroke="#C8A96E" stroke-width="0.6" opacity="0.4"/>
+        <!-- Door -->
+        <rect x="96" y="175" width="28" height="55" fill="#0d0d0a" stroke="#C8A96E" stroke-width="0.8" opacity="0.8"/>
+        <path d="M96,175 Q110,160 124,175" fill="none" stroke="#C8A96E" stroke-width="0.6" opacity="0.5"/>
+        <!-- Windows -->
+        <rect x="50" y="145" width="32" height="26" fill="#0d0d0a" stroke="#C8A96E" stroke-width="0.8" opacity="0.8"/>
+        <line x1="66" y1="145" x2="66" y2="171" stroke="#C8A96E" stroke-width="0.4" opacity="0.4"/>
+        <line x1="50" y1="158" x2="82" y2="158" stroke="#C8A96E" stroke-width="0.4" opacity="0.4"/>
+        <rect x="158" y="145" width="32" height="26" fill="#0d0d0a" stroke="#C8A96E" stroke-width="0.8" opacity="0.8"/>
+        <line x1="174" y1="145" x2="174" y2="171" stroke="#C8A96E" stroke-width="0.4" opacity="0.4"/>
+        <line x1="158" y1="158" x2="190" y2="158" stroke="#C8A96E" stroke-width="0.4" opacity="0.4"/>
+        <!-- Height dimension -->
+        <line x1="18" y1="115" x2="18" y2="230" stroke="#C8A96E" stroke-width="0.5" opacity="0.3"/>
+        <line x1="12" y1="115" x2="24" y2="115" stroke="#C8A96E" stroke-width="0.5" opacity="0.3"/>
+        <line x1="12" y1="230" x2="24" y2="230" stroke="#C8A96E" stroke-width="0.5" opacity="0.3"/>
+        <text x="10" y="176" fill="#C8A96E" font-size="7" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.35" transform="rotate(-90,10,176)">3.2 m</text>
+        <!-- Label -->
+        <text x="120" y="255" fill="#C8A96E" font-size="8" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.4">North elevation</text>
+        <text x="220" y="275" fill="#C8A96E" font-size="7" font-family="'DM Sans',sans-serif" text-anchor="end" opacity="0.2" letter-spacing="1">VIEWJECT</text>
+      </svg>
+      <span class="port-cell-label">Elevation — front</span>
+    </div>
+
+    <!-- Cell 3: Isometric 3D sketch -->
+    <div class="port-cell">
+      <svg viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;">
+        <rect width="240" height="280" fill="#161614"/>
+        <!-- Mini isometric house -->
+        <!-- Base -->
+        <polygon points="120,200 196,160 120,120 44,160" fill="#1e1e1b" stroke="#C8A96E" stroke-width="0.7" opacity="0.5"/>
+        <!-- Left wall -->
+        <polygon points="44,160 120,200 120,130 44,90" fill="#252521" stroke="#C8A96E" stroke-width="0.7" opacity="0.5"/>
+        <!-- Right wall -->
+        <polygon points="196,160 120,200 120,130 196,90" fill="#1e1e1c" stroke="#C8A96E" stroke-width="0.7" opacity="0.4"/>
+        <!-- Left roof -->
+        <polygon points="44,90 120,50 120,130 44,90" fill="#2a2a26" stroke="#C8A96E" stroke-width="0.8" opacity="0.6"/>
+        <!-- Right roof -->
+        <polygon points="196,90 120,50 120,130 196,90" fill="#222220" stroke="#C8A96E" stroke-width="0.8" opacity="0.5"/>
+        <!-- Ridge -->
+        <line x1="120" y1="50" x2="120" y2="130" stroke="#C8A96E" stroke-width="1" opacity="0.6"/>
+        <!-- Roof edges -->
+        <line x1="44" y1="90" x2="120" y2="50" stroke="#C8A96E" stroke-width="1.2" opacity="0.7"/>
+        <line x1="196" y1="90" x2="120" y2="50" stroke="#C8A96E" stroke-width="1.2" opacity="0.7"/>
+        <!-- Left wall window -->
+        <rect x="58" y="118" width="22" height="18" fill="#0d0d0a" stroke="#C8A96E" stroke-width="0.6" opacity="0.9"/>
+        <!-- Door -->
+        <rect x="95" y="168" width="15" height="32" fill="#141411" stroke="#C8A96E" stroke-width="0.6" opacity="0.9"/>
+        <!-- Point cloud overlay -->
+        <circle cx="72" cy="72" r="1" fill="#C8A96E" opacity="0.6"><animate attributeName="opacity" values="0;0.6;0" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+        <circle cx="88" cy="62" r="0.8" fill="#C8A96E" opacity="0.5"><animate attributeName="opacity" values="0;0.5;0" dur="1.6s" begin="0.4s" repeatCount="indefinite"/></circle>
+        <circle cx="60" cy="80" r="1.2" fill="#C8A96E" opacity="0.4"><animate attributeName="opacity" values="0;0.4;0" dur="2.4s" begin="0.8s" repeatCount="indefinite"/></circle>
+        <circle cx="168" cy="68" r="0.9" fill="#C8A96E" opacity="0.5"><animate attributeName="opacity" values="0;0.5;0" dur="1.8s" begin="0.2s" repeatCount="indefinite"/></circle>
+        <circle cx="182" cy="78" r="1.1" fill="#C8A96E" opacity="0.4"><animate attributeName="opacity" values="0;0.4;0" dur="2.2s" begin="0.6s" repeatCount="indefinite"/></circle>
+        <!-- Corner dots -->
+        <circle cx="44" cy="90" r="2" fill="none" stroke="#C8A96E" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="196" cy="90" r="2" fill="none" stroke="#C8A96E" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="120" cy="50" r="2" fill="none" stroke="#C8A96E" stroke-width="0.6" opacity="0.6"/>
+        <!-- Label -->
+        <text x="120" y="230" fill="#C8A96E" font-size="8" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.4">3D model — isometric</text>
+        <text x="220" y="275" fill="#C8A96E" font-size="7" font-family="'DM Sans',sans-serif" text-anchor="end" opacity="0.2" letter-spacing="1">VIEWJECT</text>
+      </svg>
+      <span class="port-cell-label">3D model</span>
+    </div>
+
+    <!-- Cell 4: 360 virtual tour wireframe -->
+    <div class="port-cell">
+      <svg viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;">
+        <rect width="240" height="280" fill="#0f0f0d"/>
+        <!-- Sphere wireframe (360 tour feel) -->
+        <ellipse cx="120" cy="135" rx="90" ry="90" fill="none" stroke="#C8A96E" stroke-width="0.6" opacity="0.25"/>
+        <!-- Latitude lines -->
+        <ellipse cx="120" cy="108" rx="78" ry="18" fill="none" stroke="#C8A96E" stroke-width="0.5" opacity="0.2"/>
+        <ellipse cx="120" cy="135" rx="90" ry="22" fill="none" stroke="#C8A96E" stroke-width="0.5" opacity="0.2"/>
+        <ellipse cx="120" cy="162" rx="78" ry="18" fill="none" stroke="#C8A96E" stroke-width="0.5" opacity="0.2"/>
+        <!-- Longitude lines -->
+        <ellipse cx="120" cy="135" rx="22" ry="90" fill="none" stroke="#C8A96E" stroke-width="0.5" opacity="0.2"/>
+        <ellipse cx="120" cy="135" rx="60" ry="90" fill="none" stroke="#C8A96E" stroke-width="0.4" opacity="0.15"/>
+        <!-- Interior room lines (inside sphere) -->
+        <line x1="56" y1="135" x2="184" y2="135" stroke="#C8A96E" stroke-width="0.5" opacity="0.15"/>
+        <line x1="120" y1="45" x2="120" y2="225" stroke="#C8A96E" stroke-width="0.5" opacity="0.15"/>
+        <!-- FOV triangle -->
+        <polygon points="120,135 78,90 162,90" fill="#C8A96E" opacity="0.04" stroke="#C8A96E" stroke-width="0.6" stroke-opacity="0.3"/>
+        <!-- Camera icon centre -->
+        <circle cx="120" cy="135" r="8" fill="none" stroke="#C8A96E" stroke-width="1" opacity="0.6"/>
+        <circle cx="120" cy="135" r="3" fill="#C8A96E" opacity="0.4"/>
+        <!-- Orbit dot -->
+        <circle cx="120" cy="45" r="3" fill="#C8A96E" opacity="0.6">
+          <animateTransform attributeName="transform" type="rotate" from="0 120 135" to="360 120 135" dur="8s" repeatCount="indefinite"/>
+        </circle>
+        <!-- 360 label -->
+        <text x="120" y="240" fill="#C8A96E" font-size="22" font-family="'Cormorant Garamond',serif" text-anchor="middle" opacity="0.15" font-weight="300">360°</text>
+        <text x="120" y="258" fill="#C8A96E" font-size="8" font-family="'DM Sans',sans-serif" text-anchor="middle" opacity="0.4">Virtual tour</text>
+        <text x="220" y="275" fill="#C8A96E" font-size="7" font-family="'DM Sans',sans-serif" text-anchor="end" opacity="0.2" letter-spacing="1">VIEWJECT</text>
+      </svg>
+      <span class="port-cell-label">360° virtual tour</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-left reveal">
+    <p class="section-eyebrow">Who we are</p>
+    <h2 class="section-title">Architecture meets<br><em>digital media</em></h2>
+    <p class="about-body">Viewject bridges the physical and the digital — bringing architectural precision to property media. Based in Brisbane, we work with private sellers, agents, and commercial clients across South East Queensland.</p>
+    <div class="about-creds">
+      <div class="cred">Bachelor of Architecture</div>
+      <div class="cred">Insta360 X5 — professional 360° capture</div>
+      <div class="cred">Meshroom — photogrammetry &amp; 3D modelling</div>
+      <div class="cred">South East Queensland based</div>
+    </div>
+  </div>
+  <div class="about-right reveal">
+    <p class="section-eyebrow">Our approach</p>
+    <p class="about-quote">"We don't just photograph a property — we <strong>understand</strong> it."</p>
+    <p class="about-body">Most photographers see rooms. We see spatial relationships, light, and flow — and that's what makes our clients' listings stand out.</p>
+    <div class="about-creds">
+      <div class="cred" style="color: rgba(245,242,236,0.55);">Architectural spatial awareness</div>
+      <div class="cred" style="color: rgba(245,242,236,0.55);">Staging &amp; presentation advice</div>
+      <div class="cred" style="color: rgba(245,242,236,0.55);">Fast, professional turnaround</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="contact-info reveal">
+      <p class="section-eyebrow">Get in touch</p>
+      <h2 class="section-title">Ready to<br><em>elevate your listing?</em></h2>
+      <p class="contact-body">Fill in the form and we'll get back to you within 24 hours with a quote.</p>
+      <div class="contact-detail">
+        <span class="contact-detail-label">Location</span>
+        <span class="contact-detail-value">Brisbane, QLD — servicing South East Queensland</span>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-label">Email</span>
+        <span class="contact-detail-value">hello@viewject.com.au</span>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-label">Response time</span>
+        <span class="contact-detail-value">Within 24 hours</span>
+      </div>
+    </div>
+
+    <div class="form reveal">
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">First name</label>
+          <input class="form-input" type="text" placeholder="James">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Last name</label>
+          <input class="form-input" type="text" placeholder="Smith">
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email address</label>
+        <input class="form-input" type="email" placeholder="james@agency.com.au">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Phone</label>
+        <input class="form-input" type="tel" placeholder="04xx xxx xxx">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Package interest</label>
+        <select class="form-select">
+          <option value="">Select a package</option>
+          <option>Snapshot — from $299</option>
+          <option>Showcase — from $649</option>
+          <option>Signature — from $1,299</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Property address or suburb</label>
+        <input class="form-input" type="text" placeholder="e.g. New Farm, Brisbane">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Anything else?</label>
+        <textarea class="form-textarea" placeholder="Tell us about the property, timeline, or any specific requirements..."></textarea>
+      </div>
+      <div class="form-submit">
+        <a href="mailto:hello@viewject.com.au" class="btn-primary">Send enquiry</a>
+        <span class="form-note">We'll reply within 24 hours.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">View<span>ject</span></div>
+  <span class="footer-copy">© 2025 Viewject. Brisbane, QLD.</span>
+  <ul class="footer-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
